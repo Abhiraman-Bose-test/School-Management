@@ -1,27 +1,56 @@
 # School Management API
 
-Node.js, Express.js and MySQL API project for managing school data.
+A Node.js, Express.js, and MySQL based REST API project for managing school data.
 
-This project allows users to:
+The application allows users to:
 
-- Add new schools to a MySQL database.
-- Retrieve all schools sorted by proximity to a user-provided latitude and longitude.
-
-## Features
-
-- Add new schools using `POST /addSchool`
-- Validate request data before inserting into MySQL
-- Fetch all schools using `GET /listSchools`
-- Sort schools by proximity to the user's latitude and longitude
-- Uses parameterized SQL queries with `mysql2`
-- Uses the Haversine formula for distance calculation
-- Includes Postman collection support
+- Add new schools with name, address, latitude, and longitude.
+- Retrieve schools sorted by proximity to a user-provided location.
+- Validate all request inputs before database insertion or query execution.
 
 ## Tech Stack
 
 - Node.js
 - Express.js
 - MySQL
+
+## Features
+
+- Add school API
+- List schools API
+- Input validation
+- MySQL database integration
+- Haversine formula based distance calculation
+- Schools sorted by nearest distance
+- Postman collection for API testing
+- Railway deployment compatible setup
+
+## Live API Base URL
+
+```txt
+https://school-management-production-1288.up.railway.app
+```
+
+## Live API Endpoints
+
+### Health Check
+
+```txt
+GET https://school-management-production-1288.up.railway.app/
+```
+
+### Add School
+
+```txt
+POST https://school-management-production-1288.up.railway.app/addSchool
+```
+
+### List Schools
+
+```txt
+GET https://school-management-production-1288.up.railway.app/listSchools?latitude=28.6139&longitude=77.2090
+```
+
 ## Project Structure
 
 ```txt
@@ -40,7 +69,7 @@ school-management-api/
 │       └── schoolValidator.js
 ├── schema.sql
 ├── postman_collection.json
-├── .env
+├── .env.example
 ├── package.json
 ├── package-lock.json
 └── server.js
@@ -55,7 +84,7 @@ Database name: schools
 Table name: schools
 ```
 
-Run the following SQL in MySQL Workbench or from your terminal:
+Run the following SQL in MySQL:
 
 ```sql
 CREATE DATABASE IF NOT EXISTS schools;
@@ -81,43 +110,9 @@ INSERT INTO schools (name, address, latitude, longitude) VALUES
 ('Springdales School', 'Pusa Road, New Delhi', 28.6422, 77.1817);
 ```
 
-## How to Run `schema.sql`
+## Environment Variables
 
-### Option 1: Using MySQL Workbench
-
-1. Open MySQL Workbench.
-2. Connect to your local MySQL server.
-3. Open `schema.sql` or paste the SQL code above.
-4. Click the lightning/run icon.
-5. Verify using:
-
-```sql
-SHOW DATABASES;
-USE schools;
-SHOW TABLES;
-```
-
-You should see the `schools` table.
-
-### Option 2: Using Terminal
-
-Go to your project folder:
-
-```bash
-cd path/to/school-management-api
-```
-
-Run:
-
-```bash
-mysql -u root -p < schema.sql
-```
-
-Enter your MySQL password when asked.
-
-## Environment Setup
-
-Create a `.env` file in the root folder where `package.json` and `server.js` exist.
+Create a `.env` file in the root folder.
 
 ```env
 PORT=8080
@@ -131,11 +126,23 @@ DB_NAME=schools
 
 Important:
 
-- `DB_NAME` should be `schools` because the database name is `schools`.
-- The table name is also `schools`.
-- Make sure `.env` is not placed inside the `src` folder.
+- Do not push `.env` to GitHub.
+- Add `.env` inside `.gitignore`.
+- For Railway deployment, add these variables in Railway dashboard instead of using `.env`.
 
 ## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Abhiraman-Bose-test/School-Management.git
+```
+
+Go to the project folder:
+
+```bash
+cd School-Management
+```
 
 Install dependencies:
 
@@ -145,34 +152,55 @@ npm install
 
 ## Run Locally
 
-For development:
+Development mode:
 
 ```bash
 npm run dev
 ```
 
-For production/local normal run:
+Production mode:
 
 ```bash
 npm start
 ```
 
-Expected terminal output:
+Expected output:
 
 ```txt
-MySQL connected successfully
 School Management API is running on port 8080
+MySQL connected successfully
 ```
 
-Base URL:
+Local Base URL:
 
 ```txt
 http://localhost:8080
 ```
 
-## API Documentation
+# API Documentation
 
-## 1. Add School API
+## 1. Health Check API
+
+### Endpoint
+
+```txt
+GET /
+```
+
+### Success Response
+
+```json
+{
+  "success": true,
+  "message": "School Management API is running",
+  "endpoints": {
+    "addSchool": "POST /addSchool",
+    "listSchools": "GET /listSchools?latitude=28.6139&longitude=77.2090"
+  }
+}
+```
+
+## 2. Add School API
 
 ### Endpoint
 
@@ -180,19 +208,17 @@ http://localhost:8080
 POST /addSchool
 ```
 
-### Purpose
-
-Adds a new school record to the `schools` table.
-
-### Request Body
-
-In Postman, select:
+### Live URL
 
 ```txt
-Body → raw → JSON
+POST https://school-management-production-1288.up.railway.app/addSchool
 ```
 
-Then add:
+### Description
+
+Adds a new school to the `schools` table.
+
+### Request Body
 
 ```json
 {
@@ -205,12 +231,10 @@ Then add:
 
 ### Validation Rules
 
-The API validates that:
-
 - `name` is required and must be a non-empty string.
 - `address` is required and must be a non-empty string.
-- `latitude` is required and must be a valid number between `-90` and `90`.
-- `longitude` is required and must be a valid number between `-180` and `180`.
+- `latitude` is required and must be a number between `-90` and `90`.
+- `longitude` is required and must be a number between `-180` and `180`.
 
 ### Success Response
 
@@ -240,7 +264,7 @@ The API validates that:
 }
 ```
 
-## 2. List Schools API
+## 3. List Schools API
 
 ### Endpoint
 
@@ -248,7 +272,13 @@ The API validates that:
 GET /listSchools
 ```
 
-### Purpose
+### Live URL
+
+```txt
+GET https://school-management-production-1288.up.railway.app/listSchools?latitude=28.6139&longitude=77.2090
+```
+
+### Description
 
 Fetches all schools from the database and returns them sorted by distance from the user's location.
 
@@ -256,16 +286,14 @@ Fetches all schools from the database and returns them sorted by distance from t
 
 | Parameter | Required | Description |
 |---|---:|---|
-| latitude | Yes | User latitude, between -90 and 90 |
-| longitude | Yes | User longitude, between -180 and 180 |
+| latitude | Yes | User latitude between -90 and 90 |
+| longitude | Yes | User longitude between -180 and 180 |
 
 ### Example Request
 
 ```txt
-GET http://localhost:8080/listSchools?latitude=28.6139&longitude=77.2090
+GET /listSchools?latitude=28.6139&longitude=77.2090
 ```
-
-No request body is required for this API.
 
 ### Success Response
 
@@ -307,103 +335,75 @@ No request body is required for this API.
 }
 ```
 
-## Distance Sorting
+## Distance Calculation
 
-The API uses the Haversine formula to calculate the geographical distance between the user's location and each school's location.
+The API uses the Haversine formula to calculate the geographical distance between the user's coordinates and each school's coordinates.
 
-Schools are sorted in ascending order of:
+The schools are sorted in ascending order of:
 
 ```txt
 distanceKm
 ```
 
-## Postman Testing
-
-### Add School API
-
-```txt
-Method: POST
-URL: http://localhost:8080/addSchool
-Body: raw JSON
-```
-
-Request body:
-
-```json
-{
-  "name": "Delhi Public School",
-  "address": "Mathura Road, New Delhi",
-  "latitude": 28.5931,
-  "longitude": 77.2507
-}
-```
-
-### List Schools API
-
-```txt
-Method: GET
-URL: http://localhost:8080/listSchools?latitude=28.6139&longitude=77.2090
-Body: Not required
-```
-
 ## Postman Collection
 
-Import this file into Postman:
+The Postman collection is available here:
 
-```txt
-postman_collection.json
-```
+<https://abhiramanbose-2294608.postman.co/workspace/abhiramanbose's-Workspace~503fe8bd-28ef-452b-8300-a346ae44cfa1/collection/54487546-6ec2b1b2-6f08-4df0-b78f-f47fa5981eef?action=share&source=copy-link&creator=54487546>
 
-After deployment, update the Postman variable `base_url` from:
+The collection includes:
 
-```txt
-http://localhost:8080
-```
+- Health Check API
+- Add School API
+- Add School validation error test
+- List Schools API
+- List Schools validation error test
+- Sample request bodies
+- Expected responses
+- Basic test scripts
 
-to your deployed API URL.
+## Railway Deployment Notes
 
-## Deployment Notes
-
-You can deploy the API on any Node.js hosting provider that supports environment variables and outbound MySQL connections.
-
-Suggested deployment flow:
-
-1. Push this project to GitHub.
-2. Create a MySQL database named `schools` on your hosting provider or use a managed MySQL service.
-3. Run `schema.sql` on the production database.
-4. Set environment variables on the hosting platform:
-   - `PORT`
-   - `DB_HOST`
-   - `DB_PORT`
-   - `DB_USER`
-   - `DB_PASSWORD`
-   - `DB_NAME=schools`
-5. Use this start command:
+For Railway deployment, use the following start command:
 
 ```bash
 npm start
 ```
 
-6. Test the deployed APIs using Postman.
+Do not manually set `PORT` on Railway. Railway provides it automatically.
 
-## Live API Endpoint Format
+Add these variables in the Railway backend service:
 
-After deployment, your endpoints will look like this:
-
-```txt
-POST https://your-api-domain.com/addSchool
-GET  https://your-api-domain.com/listSchools?latitude=28.6139&longitude=77.2090
+```env
+DB_HOST=${MySQL.MYSQLHOST}
+DB_PORT=${MySQL.MYSQLPORT}
+DB_USER=${MySQL.MYSQLUSER}
+DB_PASSWORD=${MySQL.MYSQLPASSWORD}
+DB_NAME=${MySQL.MYSQLDATABASE}
 ```
 
-Replace `https://your-api-domain.com` with your actual deployed backend URL.
+If your MySQL service name is different, replace `MySQL` with the exact Railway service name.
+
+For Railway MySQL, create only the table because Railway already provides the database:
+
+```sql
+CREATE TABLE IF NOT EXISTS schools (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(500) NOT NULL,
+    latitude FLOAT NOT NULL,
+    longitude FLOAT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
 
 ## Common Errors
 
-### 1. Access denied for user ''@'localhost'
+### Access denied for user
 
-This means your `.env` file is missing, misplaced, or the DB variables are not loading.
+This usually means `.env` is missing, misplaced, or Railway DB variables are incorrect.
 
-Check that `.env` exists in the root folder and contains:
+Check:
 
 ```env
 DB_USER=root
@@ -411,11 +411,11 @@ DB_PASSWORD=your_mysql_password
 DB_NAME=schools
 ```
 
-Then restart the server.
+For Railway, check that your variables are mapped from the MySQL service.
 
-### 2. Unknown database
+### Unknown database
 
-This means the `schools` database was not created.
+This means the database does not exist locally.
 
 Run:
 
@@ -423,11 +423,9 @@ Run:
 CREATE DATABASE IF NOT EXISTS schools;
 ```
 
-Then run the full schema again.
+### Table does not exist
 
-### 3. Table does not exist
-
-This means the database exists, but the `schools` table was not created.
+This means the database exists but the `schools` table has not been created.
 
 Run:
 
@@ -443,3 +441,7 @@ CREATE TABLE IF NOT EXISTS schools (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
+
+## Author
+
+Abhiraman Bose
