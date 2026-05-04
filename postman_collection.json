@@ -1,0 +1,407 @@
+{
+  "info": {
+    "name": "School Management API",
+    "description": "Postman collection for testing School Management APIs. Includes Add School API, List Schools API, sample request bodies, query parameters, expected responses, and basic status-code tests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            ""
+          ]
+        },
+        "description": "Checks whether the School Management API server is running."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response contains success true\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.eql(true);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"success\": true,\n  \"message\": \"School Management API is running\",\n  \"endpoints\": {\n    \"addSchool\": \"POST /addSchool\",\n    \"listSchools\": \"GET /listSchools?latitude=28.6139&longitude=77.2090\"\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Add School - Delhi Public School",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Delhi Public School\",\n  \"address\": \"Mathura Road, New Delhi\",\n  \"latitude\": 28.5931,\n  \"longitude\": 77.2507\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/addSchool",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "addSchool"
+          ]
+        },
+        "description": "Adds Delhi Public School to the schools table after validating the request body."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"School added successfully\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.eql(true);",
+              "    pm.expect(jsonData.message).to.eql(\"School added successfully\");",
+              "    pm.expect(jsonData.data).to.have.property(\"id\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "Success",
+          "originalRequest": {},
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"success\": true,\n  \"message\": \"School added successfully\",\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"Delhi Public School\",\n    \"address\": \"Mathura Road, New Delhi\",\n    \"latitude\": 28.5931,\n    \"longitude\": 77.2507\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Add School - Modern School",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Modern School\",\n  \"address\": \"Barakhamba Road, New Delhi\",\n  \"latitude\": 28.6287,\n  \"longitude\": 77.2295\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/addSchool",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "addSchool"
+          ]
+        },
+        "description": "Adds Modern School to the schools table after validating the request body."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"School added successfully\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.eql(true);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "Success",
+          "originalRequest": {},
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"success\": true,\n  \"message\": \"School added successfully\",\n  \"data\": {\n    \"id\": 2,\n    \"name\": \"Modern School\",\n    \"address\": \"Barakhamba Road, New Delhi\",\n    \"latitude\": 28.6287,\n    \"longitude\": 77.2295\n  }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Add School - Validation Error",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"\",\n  \"address\": \"Invalid School Address\",\n  \"latitude\": 120,\n  \"longitude\": 77.209\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/addSchool",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "addSchool"
+          ]
+        },
+        "description": "Negative test case. This request should fail because name is empty and latitude is outside the valid range."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test(\"Validation failed\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.eql(false);",
+              "    pm.expect(jsonData.message).to.eql(\"Validation failed\");",
+              "    pm.expect(jsonData.errors).to.be.an(\"array\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "Validation Error",
+          "originalRequest": {},
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": [\n    \"name is required and must be a non-empty string\",\n    \"latitude is required and must be a number between -90 and 90\"\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "List Schools Sorted By Distance",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/listSchools?latitude=28.6139&longitude=77.2090",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "listSchools"
+          ],
+          "query": [
+            {
+              "key": "latitude",
+              "value": "28.6139",
+              "description": "User latitude"
+            },
+            {
+              "key": "longitude",
+              "value": "77.2090",
+              "description": "User longitude"
+            }
+          ]
+        },
+        "description": "Fetches all schools and sorts them by geographical distance from the user's latitude and longitude. No request body is required."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Response has sorted school list\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.eql(true);",
+              "    pm.expect(jsonData.data).to.be.an(\"array\");",
+              "    if (jsonData.data.length > 0) {",
+              "        pm.expect(jsonData.data[0]).to.have.property(\"distanceKm\");",
+              "    }",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "Success",
+          "originalRequest": {},
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"success\": true,\n  \"message\": \"Schools fetched successfully\",\n  \"count\": 2,\n  \"data\": [\n    {\n      \"id\": 2,\n      \"name\": \"Modern School\",\n      \"address\": \"Barakhamba Road, New Delhi\",\n      \"latitude\": 28.6287,\n      \"longitude\": 77.2295,\n      \"distanceKm\": 2.6\n    },\n    {\n      \"id\": 1,\n      \"name\": \"Delhi Public School\",\n      \"address\": \"Mathura Road, New Delhi\",\n      \"latitude\": 28.5931,\n      \"longitude\": 77.2507,\n      \"distanceKm\": 4.71\n    }\n  ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "List Schools - Validation Error",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/listSchools?latitude=invalid&longitude=77.2090",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "listSchools"
+          ],
+          "query": [
+            {
+              "key": "latitude",
+              "value": "invalid"
+            },
+            {
+              "key": "longitude",
+              "value": "77.2090"
+            }
+          ]
+        },
+        "description": "Negative test case. This request should fail because latitude is invalid."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 400\", function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test(\"Validation failed\", function () {",
+              "    const jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.eql(false);",
+              "    pm.expect(jsonData.errors).to.be.an(\"array\");",
+              "});"
+            ]
+          }
+        }
+      ],
+      "response": [
+        {
+          "name": "Validation Error",
+          "originalRequest": {},
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"success\": false,\n  \"message\": \"Validation failed\",\n  \"errors\": [\n    \"latitude query parameter is required and must be a number between -90 and 90\"\n  ]\n}"
+        }
+      ]
+    }
+  ]
+}
