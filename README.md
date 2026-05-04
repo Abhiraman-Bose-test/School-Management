@@ -22,10 +22,6 @@ This project allows users to:
 - Node.js
 - Express.js
 - MySQL
-- dotenv
-- cors
-- nodemon
-
 ## Project Structure
 
 ```txt
