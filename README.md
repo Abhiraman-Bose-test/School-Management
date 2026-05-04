@@ -22,7 +22,6 @@ This project allows users to:
 - Node.js
 - Express.js
 - MySQL
-- mysql2
 - dotenv
 - cors
 - nodemon
